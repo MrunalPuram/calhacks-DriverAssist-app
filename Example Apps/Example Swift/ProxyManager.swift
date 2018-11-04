@@ -27,11 +27,45 @@ class ProxyManager: NSObject {
     fileprivate var performInteractionManager: PerformInteractionManager!
     fileprivate var firstHMILevelState: SDLHMILevel
     weak var delegate: ProxyManagerDelegate?
+    
+    
+    var subscribeVehicleData: SDLSubscribeVehicleData
+    var SDLspeed: NSNumber
+    var prevSpeed: NSNumber
+    var SDLfuelLevel: NSNumber
+    var SDLgps: SDLGPSData?
+    var accelerationArray: [Int] = []
+    var maxSpeed: Int = 0
+    var speedDuration: Int = 0
+    var aggressiveDrivingCount: Int = 0
+    var turningMistakesCount: Int = 0
+    var rollingStops: Int = 0
+    var speedLimit: Int = 96 // 96km/hr is 60 mph
+    
+    var fuelLevel: Int = 100
+    var fuelRange: Int = 100
+//    var tirePressureFL: Double = 100
+//    var tirePressureFR: Double = 100
+//    var tirePressureBL: Double = 100
+//    var tirePressureBR: Double = 100
+    var tirePressureLF: String = ""
+    var tirePressureRF: String = ""
+    var tirePressureLR: String = ""
+    var tirePressureRR: String = ""
+    var externalTemperature: Int = 0
+    var engineOilLife: Int = 100
+    var odometer: Int = 0
+    var vin: String = ""
+    
 
     // Singleton
     static let sharedManager = ProxyManager()
     private override init() {
         firstHMILevelState = .none
+        self.subscribeVehicleData = SDLSubscribeVehicleData()
+        self.SDLspeed = -1
+        self.prevSpeed = 0
+        self.SDLfuelLevel = -1
         super.init()
     }
 }
@@ -39,6 +73,309 @@ class ProxyManager: NSObject {
 // MARK: - SDL Configuration
 
 extension ProxyManager {
+    
+    func getData() -> Int {
+        print("Hi")
+        let getVehicleData = SDLGetVehicleData()
+        getVehicleData.prndl = true
+        getVehicleData.fuelLevel = true
+        getVehicleData.speed = true
+        getVehicleData.accPedalPosition = true
+        getVehicleData.driverBraking = true
+        getVehicleData.gps = true
+        getVehicleData.turnSignal = true
+        getVehicleData.steeringWheelAngle = true
+        sdlManager?.send(request: getVehicleData, responseHandler: { (request, response, error) in
+            guard let response = response as? SDLGetVehicleDataResponse else { return }
+            if let error = error {
+                print("Encountered Error sending GetVehicleData: \(error)")
+                return
+            }
+
+            
+            guard response.success.boolValue == true else {
+                if response.resultCode == .rejected {
+                    print("GetVehicleData was rejected. Are you in an appropriate HMI?")
+                } else if response.resultCode == .disallowed {
+                    print("Your app is not allowed to use GetVehicleData")
+                } else {
+                    print("Some unknown error has occured!")
+                }
+                return
+            }
+            
+//            guard let prndl = response.prndl else { return }
+//            guard let fuelLevel = response.fuelLevel else { return }
+            guard let speed = response.speed else { return }
+//            guard let accPedalPosition = response.accPedalPosition else { return }
+//            guard let driverBraking = response.driverBraking else { return }
+//            guard let turnSignal = response.turnSignal else { return }
+//            let turnSignal = response.turnSignal
+            guard let gps = response.gps else { return }
+            print("Hello World we want data")
+//            print(prndl)
+//            print("Fuellevel \(fuelLevel)")
+            print(response)
+//            print("Speed \(speed)")
+//            print("accPedalPosition \(accPedalPosition)")
+//            print("driverBraking \(driverBraking)")
+//            print("turnSignal \(turnSignal)")
+            
+        })
+        return 5
+    }
+    
+//    func getValue(key:String) -> Int {
+//        print("Calling Get Value")
+//        let getVehicleData = SDLGetVehicleData()
+//        getVehicleData.key = true
+//
+//        sdlManager?.send(request: getVehicleData, responseHandler: { (request, response, error) in
+//            guard let response = response as? SDLGetVehicleDataResponse else { return }
+//
+//            if let error = error {
+//                print("Encountered Error sending GetVehicleData: \(error)")
+//                return
+//            }
+//
+//
+//            guard response.success.boolValue == true else {
+//                if response.resultCode == .rejected {
+//                    print("GetVehicleData was rejected. Are you in an appropriate HMI?")
+//                } else if response.resultCode == .disallowed {
+//                    print("Your app is not allowed to use GetVehicleData")
+//                } else {
+//                    print("Some unknown error has occured!")
+//                }
+//                return
+//            }
+//
+//            guard let prndl = response.prndl else { return }
+//            guard let fuelLevel = response.fuelLevel else { return }
+//            guard let speed = response.speed else { return }
+//            guard let accPedalPosition = response.accPedalPosition else { return }
+//            guard let driverBraking = response.driverBraking else { return }
+//            print("Hello World we want data")
+//            print(prndl)
+//            print(fuelLevel)
+//            print(speed)
+//            print(accPedalPosition)
+//            print(driverBraking)
+//
+//        })
+//        return 5
+//    }
+    
+//    func subscribe() {
+//        NotificationCenter.default.addObserver(self, selector: #selector(vehicleDataAvailable(_:)), name: .SDLDidReceiveVehicleData, object: nil)
+//
+//        let subscribeVehicleData = SDLSubscribeVehicleData()
+//        subscribeVehicleData.prndl = true
+//
+//        sdlManager.send(request: subscribeVehicleData) { (request, response, error) in
+//            guard let response = response as? SDLSubscribeVehicleDataResponse else { return }
+//
+//            guard response.success.boolValue == true else {
+//                if response.resultCode == .disallowed {
+//                    // Not allowed to register for this vehicle data.
+//                } else if response.resultCode == .userDisallowed {
+//                    // User disabled the ability to give you this vehicle data
+//                } else if response.resultCode == .ignored {
+//                    if let prndlData = response.prndl {
+//                        if prndlData.resultCode == .dataAlreadySubscribed {
+//                            // You have access to this data item, and you are already subscribed to this item so we are ignoring.
+//                        } else if prndlData.resultCode == .vehicleDataNotAvailable {
+//                            // You have access to this data item, but the vehicle you are connected to does not provide it.
+//                        } else {
+//                            print("Unknown reason for being ignored: \(prndlData.resultCode)")
+//                        }
+//                    } else {
+//                        print("Unknown reason for being ignored: \(String(describing: response.info))")
+//                    }
+//                } else if let error = error {
+//                    print("Encountered Error sending SubscribeVehicleData: \(error)")
+//                }
+//                return
+//            }
+//
+//            // Successfully subscribed
+//        }
+//    }
+    
+//    func vehicleDataAvailable(_ notification: SDLRPCNotificationNotification) {
+//        guard let onVehicleData = notification.notification as? SDLOnVehicleData else {
+//            return
+//        }
+//
+//        let prndl = onVehicleData.prndl
+//    }
+    
+    func subscribe(){
+        NotificationCenter.default.addObserver(self, selector: #selector(vehicleDataAvailable(_:)), name: .SDLDidReceiveVehicleData, object: nil)
+
+        subscribeVehicleData.speed = true // as NSNumber & SDLBool
+        subscribeVehicleData.fuelLevel = true //as NSNumber & SDLBool
+        subscribeVehicleData.gps = true
+        subscribeVehicleData.fuelRange = true
+        subscribeVehicleData.tirePressure = true
+        subscribeVehicleData.externalTemperature = true
+        subscribeVehicleData.engineOilLife = true
+        subscribeVehicleData.odometer = true
+
+
+
+        sdlManager.send(request: subscribeVehicleData) { (request, response, error) in
+            guard let response = response as? SDLSubscribeVehicleDataResponse else { return }
+
+            guard response.success.boolValue == true else {
+                if response.resultCode == .disallowed {
+                    // Not allowed to register for this vehicle data.
+                    print("Not allowed to register for this vehicle data.")
+                } else if response.resultCode == .userDisallowed {
+                    // User disabled the ability to give you this vehicle data
+                    print("User disabled the ability to give you this vehicle data.")
+                } else if response.resultCode == .ignored {
+                    if let prndlData = response.prndl {
+                        if prndlData.resultCode == .dataAlreadySubscribed {
+                            // You have access to this data item, and you are already subscribed to this item so we are ignoring.
+                        } else if prndlData.resultCode == .vehicleDataNotAvailable {
+                            // You have access to this data item, but the vehicle you are connected to does not provide it.
+                        } else {
+                            print("Unknown reason for being ignored: \(prndlData.resultCode)")
+                        }
+                    } else {
+                        print("Unknown reason for being ignored: \(String(describing: response.info))")
+                    }
+                } else if let error = error {
+                    print("Encountered Error sending SubscribeVehicleData: \(error)")
+                }
+                return
+            }
+
+            // Successfully subscribed
+            print("Successfully subscribed to SPEED")
+//            self.subscribedToSpeed = true
+        }
+    }
+    
+    @objc func vehicleDataAvailable(_ notification: SDLRPCNotificationNotification) {
+        print("rip")
+        guard let onVehicleData = notification.notification as? SDLOnVehicleData else {
+            return
+        }
+        
+//        let eCallInfo = onVehicleData.eCallInfo
+        prevSpeed = SDLspeed
+        if onVehicleData.speed != nil {
+            // save the new speed data
+            SDLspeed = onVehicleData.speed!
+        }
+        
+        if onVehicleData.gps != nil {
+            SDLgps = onVehicleData.gps!
+        }
+        
+        if onVehicleData.fuelLevel != nil {
+            fuelLevel = Int(onVehicleData.fuelLevel!.intValue)
+        }
+        
+//        if onVehicleData.fuelRange != nil {
+//            fuelRange = onVehicleData.fuelRange!
+//        }
+        
+        if onVehicleData.externalTemperature != nil {
+            externalTemperature = Int(onVehicleData.externalTemperature!.intValue)
+        }
+        
+        if onVehicleData.engineOilLife != nil {
+            engineOilLife = Int(onVehicleData.engineOilLife!.intValue)
+        }
+        
+        if onVehicleData.odometer != nil {
+            odometer = Int(onVehicleData.odometer!.intValue)
+        }
+        
+        if onVehicleData.tirePressure != nil {
+//            if onVehicleData.tirePressure?.leftFront != nil {
+//                if onVehicleData.tirePressure?.leftFront.pressure != nil {
+//                    tirePressureFL = Double((onVehicleData.tirePressure?.leftFront.pressure!.doubleValue)!)
+//                }
+//            }
+//            if onVehicleData.tirePressure?.leftFront != nil {
+//                tirePressureFL = onVehicleData.tirePressure!.leftFront.pressure??.doubleValue * 0.145
+//            }
+//            if onVehicleData.tirePressure?.leftRear != nil {
+//                tirePressureBL = onVehicleData.tirePressure!.leftRear.pressure??.doubleValue * 0.145
+//            }
+//            if onVehicleData.tirePressure?.rightFront != nil {
+//                tirePressureBR = onVehicleData.tirePressure!.rightFront.pressure??.doubleValue * 0.145
+//            }
+//            if onVehicleData.tirePressure?.rightRear != nil {
+//                tirePressureFR = onVehicleData.tirePressure!.rightRear.pressure??.doubleValue * 0.145
+//            }
+            if onVehicleData.tirePressure?.leftFront != nil {
+                tirePressureLF = onVehicleData.tirePressure!.leftFront.status.rawValue.rawValue
+            }
+            if onVehicleData.tirePressure?.leftRear != nil {
+                tirePressureLR = onVehicleData.tirePressure!.leftRear.status.rawValue.rawValue
+            }
+            if onVehicleData.tirePressure?.rightFront != nil {
+                tirePressureRF = onVehicleData.tirePressure!.rightFront.status.rawValue.rawValue
+            }
+            if onVehicleData.tirePressure?.rightRear != nil {
+                tirePressureRR = onVehicleData.tirePressure!.rightRear.status.rawValue.rawValue
+            }
+
+        }
+        
+        let acceleration:Int = Int(SDLspeed.intValue) - Int(prevSpeed.intValue)
+        accelerationArray.append(acceleration)
+        calcAggressiveDriving(acceleration: acceleration)
+        
+        calcSpeedingValues(speed: Int(SDLspeed.intValue))
+        
+//        let SDLspeed = onVehicleData.speed ?? -1
+//        let SDLfuelLevel = onVehicleData.fuelLevel ?? -1
+        
+//        print("\(String(describing: eCallInfo)) updated")
+        print("\(SDLspeed) is the current speed")
+        print("\(SDLfuelLevel) is the current fuel level")
+        print("gps: \(String(describing: SDLgps))")
+        print(onVehicleData)
+        
+        
+        
+        self.sdlManager.screenManager.beginUpdates()
+        self.sdlManager.screenManager.textField1 = "Speed is \(SDLspeed) MPH"
+        self.sdlManager.screenManager.endUpdates()
+        
+        
+    }
+    
+    func calcSpeedingValues(speed: Int) {
+        if speed > maxSpeed {
+            maxSpeed = speed
+        }
+        
+        if speed > speedLimit {
+            speedDuration += 1
+        }
+    }
+    
+    func calcAggressiveDriving(acceleration: Int) {
+        if Double(acceleration) > 16.5 {
+            aggressiveDrivingCount += 1
+        } else if Double(acceleration) < -16.5 {
+            aggressiveDrivingCount += 1
+        }
+    }
+    
+    func calcTurningMistakes(){}
+    
+    func calcRollingStops(){}
+    
+    
+    
     /// Configures the SDL Manager that handles data transfer beween this app and the car's head unit and starts searching for a connection to a head unit. There are two possible types of transport layers to use: TCP is used to connect wirelessly to SDL Core and is only available for debugging; iAP is used to connect to MFi (Made for iPhone) hardware and is must be used for production builds.
     ///
     /// - Parameter connectionType: The type of transport layer to use.
@@ -98,7 +435,8 @@ private extension ProxyManager {
         lifecycleConfiguration.dayColorScheme = SDLTemplateColorScheme(primaryRGBColor: green, secondaryRGBColor: grey, backgroundRGBColor: white)
         lifecycleConfiguration.nightColorScheme = SDLTemplateColorScheme(primaryRGBColor: green, secondaryRGBColor: grey, backgroundRGBColor: darkGrey)
 
-        let lockScreenConfiguration = appIcon != nil ? SDLLockScreenConfiguration.enabledConfiguration(withAppIcon: appIcon!, backgroundColor: nil) : SDLLockScreenConfiguration.enabled()
+        let lockScreenConfiguration = SDLLockScreenConfiguration.disabled()
+//        let lockScreenConfiguration = appIcon != nil ? SDLLockScreenConfiguration.enabledConfiguration(withAppIcon: appIcon!, backgroundColor: nil) : SDLLockScreenConfiguration.disabled()
         return SDLConfiguration(lifecycle: lifecycleConfiguration, lockScreen: lockScreenConfiguration, logging: logConfiguration(), fileManager:.default())
     }
 

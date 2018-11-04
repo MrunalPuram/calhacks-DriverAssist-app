@@ -9,9 +9,9 @@
 #import "AppConstants.h"
 
 #pragma mark - SDL Configuration
-NSString * const ExampleAppName = @"SDL Example App";
-NSString * const ExampleAppNameShort = @"SDL";
-NSString * const ExampleAppNameTTS = @"S D L Example App";
+NSString * const ExampleAppName = @"Driver Assist";
+NSString * const ExampleAppNameShort = @"DA";
+NSString * const ExampleAppNameTTS = @"Driver Assist App";
 NSString * const ExampleFullAppId = @"123e4567-e89b-12d3-a456-426655440000"; // Dummy App Id
 BOOL const ExampleAppShouldRestartSDLManagerOnDisconnect = NO;
 
@@ -105,7 +105,7 @@ NSString * const ACWiperStatusMenuName = @"Wiper Status";
 #pragma mark - SDL Image Names
 NSString * const AlertBWIconName = @"alert";
 NSString * const CarBWIconImageName = @"car";
-NSString * const ExampleAppLogoName = @"sdl_logo_green";
+NSString * const ExampleAppLogoName = @"LogoMakr_6E7SOX";
 NSString * const MenuBWIconImageName = @"choice_set";
 NSString * const MicrophoneBWIconImageName = @"microphone";
 NSString * const PhoneBWIconImageName = @"phone";

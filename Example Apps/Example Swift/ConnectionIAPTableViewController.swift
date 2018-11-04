@@ -11,7 +11,8 @@ class ConnectionIAPTableViewController: UITableViewController, ProxyManagerDeleg
     @IBOutlet weak var connectTableViewCell: UITableViewCell!
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var connectButton: UIButton!
-
+    @IBOutlet weak var testLabel: UILabel!
+    
     var state: ProxyState = .stopped
 
     override func viewDidLoad() {
@@ -31,6 +32,19 @@ class ConnectionIAPTableViewController: UITableViewController, ProxyManagerDeleg
         self.connectButton.setTitle("Connect", for: .normal)
         self.connectButton.setTitleColor(.white, for: .normal)
     }
+    
+    @IBAction func openApp(_ sender: Any) {
+//        print("Hello World")
+        performSegue(withIdentifier: "segueToApp", sender: sender)
+    }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if let dest = segue.destination as? MainViewController {
+//            dest.proxy = ProxyManager
+//        }
+//    }
+    
+    
     // MARK: - IBActions
     @IBAction func connectButtonWasPressed(_ sender: UIButton) {
 
@@ -45,6 +59,7 @@ class ConnectionIAPTableViewController: UITableViewController, ProxyManagerDeleg
     }
     // MARK: - Delegate Functions
     func didChangeProxyState(_ newState: ProxyState) {
+        self.testLabel.text = String(ProxyManager.sharedManager.getData())
         state = newState
         var newColor: UIColor? = nil
         var newTitle: String? = nil

@@ -1281,6 +1281,9 @@
 		8BBEA6091F324832003EEA26 /* SDLMetadataTypeSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BBEA6081F324832003EEA26 /* SDLMetadataTypeSpec.m */; };
 		97E26DEC1E807AD70074A3C7 /* SDLMutableDataQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 97E26DEA1E807AD70074A3C7 /* SDLMutableDataQueue.h */; };
 		97E26DED1E807AD70074A3C7 /* SDLMutableDataQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 97E26DEB1E807AD70074A3C7 /* SDLMutableDataQueue.m */; };
+		ACA6F1BB218E93AF0085DDA4 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA6F1B7218E93AE0085DDA4 /* MainViewController.swift */; };
+		ACA6F1CE218F082B0085DDA4 /* DrivingFeedbackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA6F1CA218F082B0085DDA4 /* DrivingFeedbackViewController.swift */; };
+		ACA6F1D2218F18400085DDA4 /* VehicleStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACA6F1D1218F18400085DDA4 /* VehicleStatusViewController.swift */; };
 		DA0C46AD1DCD35080001F2A8 /* SDLNames.m in Sources */ = {isa = PBXBuildFile; fileRef = DA0C46AC1DCD35080001F2A8 /* SDLNames.m */; };
 		DA0C46AF1DCD41E30001F2A8 /* SDLMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = DA0C46AE1DCD41E30001F2A8 /* SDLMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA318C1F1DD0F06C00C035AC /* NSMutableDictionary+Store.h in Headers */ = {isa = PBXBuildFile; fileRef = DA318C1D1DD0F06C00C035AC /* NSMutableDictionary+Store.h */; };
@@ -2782,6 +2785,10 @@
 		8BBEA6081F324832003EEA26 /* SDLMetadataTypeSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMetadataTypeSpec.m; sourceTree = "<group>"; };
 		97E26DEA1E807AD70074A3C7 /* SDLMutableDataQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMutableDataQueue.h; sourceTree = "<group>"; };
 		97E26DEB1E807AD70074A3C7 /* SDLMutableDataQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLMutableDataQueue.m; sourceTree = "<group>"; };
+		ACA6F1B6218E93AE0085DDA4 /* SmartDeviceLink-Example-ObjC-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SmartDeviceLink-Example-ObjC-Bridging-Header.h"; sourceTree = "<group>"; };
+		ACA6F1B7218E93AE0085DDA4 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = "Example Apps/Example Swift/MainViewController.swift"; sourceTree = SOURCE_ROOT; };
+		ACA6F1CA218F082B0085DDA4 /* DrivingFeedbackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DrivingFeedbackViewController.swift; path = "Example Apps/Example Swift/DrivingFeedbackViewController.swift"; sourceTree = SOURCE_ROOT; };
+		ACA6F1D1218F18400085DDA4 /* VehicleStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VehicleStatusViewController.swift; path = "Example Apps/Example Swift/VehicleStatusViewController.swift"; sourceTree = SOURCE_ROOT; };
 		DA0C46AC1DCD35080001F2A8 /* SDLNames.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLNames.m; sourceTree = "<group>"; };
 		DA0C46AE1DCD41E30001F2A8 /* SDLMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLMacros.h; sourceTree = "<group>"; };
 		DA318C1D1DD0F06C00C035AC /* NSMutableDictionary+Store.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableDictionary+Store.h"; sourceTree = "<group>"; };
@@ -5446,11 +5453,14 @@
 		8829567B207CF49F00EF056C /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				ACA6F1D1218F18400085DDA4 /* VehicleStatusViewController.swift */,
 				5D1FF2F4213047B2000EB9B4 /* LaunchScreen.xib */,
+				ACA6F1B7218E93AE0085DDA4 /* MainViewController.swift */,
 				88A0AA5F207CFEA60075132C /* Connection */,
 				5D1FF2E82130479C000EB9B4 /* ConnectionContainerViewController.swift */,
 				5D1FF2EA2130479C000EB9B4 /* ConnectionIAPTableViewController.swift */,
 				5D1FF2E92130479C000EB9B4 /* ConnectionTCPTableViewController.swift */,
+				ACA6F1CA218F082B0085DDA4 /* DrivingFeedbackViewController.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -5479,6 +5489,7 @@
 			isa = PBXGroup;
 			children = (
 				88A0AA60207CFEAC0075132C /* Storyboards */,
+				ACA6F1B6218E93AE0085DDA4 /* SmartDeviceLink-Example-ObjC-Bridging-Header.h */,
 			);
 			name = Connection;
 			sourceTree = "<group>";
@@ -6226,6 +6237,7 @@
 					5D4019AE1A76EC350006B0C2 = {
 						CreatedOnToolsVersion = 6.1.1;
 						DevelopmentTeam = NCVC2MHU7M;
+						LastSwiftMigration = 1000;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -6237,7 +6249,7 @@
 					};
 					5D61FA1B1A84237100846EE7 = {
 						CreatedOnToolsVersion = 6.1.1;
-						LastSwiftMigration = 0940;
+						LastSwiftMigration = 1000;
 					};
 					5D61FA251A84237100846EE7 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -7220,13 +7232,16 @@
 				5D1FF2EC2130479C000EB9B4 /* ConnectionTCPTableViewController.swift in Sources */,
 				5D1FF2C4213045EB000EB9B4 /* AppConstants.m in Sources */,
 				5D1FF2DA21304746000EB9B4 /* ButtonManager.swift in Sources */,
+				ACA6F1BB218E93AF0085DDA4 /* MainViewController.swift in Sources */,
 				5D1FF2DC21304746000EB9B4 /* AlertManager.swift in Sources */,
 				5D1FF2EB2130479C000EB9B4 /* ConnectionContainerViewController.swift in Sources */,
 				5D1FF2E021304746000EB9B4 /* MenuManager.swift in Sources */,
 				5D1FF2DF21304746000EB9B4 /* PerformInteractionManager.swift in Sources */,
 				5D1FF2ED2130479C000EB9B4 /* ConnectionIAPTableViewController.swift in Sources */,
+				ACA6F1CE218F082B0085DDA4 /* DrivingFeedbackViewController.swift in Sources */,
 				5D1FF2DD21304746000EB9B4 /* RPCPermissionsManager.swift in Sources */,
 				5D1FF2E721304761000EB9B4 /* TextValidator.swift in Sources */,
+				ACA6F1D2218F18400085DDA4 /* VehicleStatusViewController.swift in Sources */,
 				5D1FF2F8213047C1000EB9B4 /* AppDelegate.swift in Sources */,
 				5D1FF2DE21304746000EB9B4 /* AudioManager.swift in Sources */,
 			);
@@ -7434,6 +7449,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = NCVC2MHU7M;
 				INFOPLIST_FILE = "$(SRCROOT)/Example Apps/Example ObjC/SmartDeviceLink-Example-ObjC-Info.plist";
@@ -7441,6 +7457,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdevicelink.SDLTestApp;
 				PRODUCT_NAME = "SDL Example";
+				SWIFT_OBJC_BRIDGING_HEADER = "SmartDeviceLink-Example-ObjC-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -7448,6 +7467,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = NCVC2MHU7M;
 				INFOPLIST_FILE = "$(SRCROOT)/Example Apps/Example ObjC/SmartDeviceLink-Example-ObjC-Info.plist";
@@ -7455,6 +7475,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.smartdevicelink.SDLTestApp;
 				PRODUCT_NAME = "SDL Example";
+				SWIFT_OBJC_BRIDGING_HEADER = "SmartDeviceLink-Example-ObjC-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};

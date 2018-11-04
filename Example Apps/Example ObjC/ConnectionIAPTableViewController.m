@@ -12,6 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *connectTableViewCell;
 @property (weak, nonatomic) IBOutlet UIButton *connectButton;
+@property (weak, nonatomic) IBOutlet UIButton *openAppButton;
+@property (weak, nonatomic) IBOutlet UILabel *testLabel;
 
 @end
 
@@ -30,6 +32,8 @@
     
     // Connect Button setup
     self.connectButton.tintColor = [UIColor whiteColor];
+    
+    self.testLabel = 
 }
 
 - (void)dealloc {
